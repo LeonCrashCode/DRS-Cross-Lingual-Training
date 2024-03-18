@@ -129,5 +129,25 @@ mtool --read amr --score smatch --gold test.penman test-sbn.post
 Add the cross-lingual training model checkpoints to the LORA.
 
 
+## Soft Well-Formed Selection
+
+In inference, we generate the output candidates according to beam search.
+
+```
+python inference.py --input_file data/test-sbn.src \
+                    --output_file test-sbn-bs.pred \
+                    --batch_size 1 \
+                    --num_beams 64 \
+                    --num_return_sequences 64 \
+                    --peft_model_id model_path
+
+ln -s DRS-Cross-Lingual-Training/src/beam_search_choose_well_form_graph.py
+
+python beam_search_choose_well_form_graph.py --input_set test-sbn-bs.pred \
+                                             --output test-sbn.pred \
+                                             --num_group 64
+```
+
+
 
 
